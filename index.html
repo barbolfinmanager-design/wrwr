@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Sharp Tongue</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <div>
+      <div class="brand">GIFT LAB</div>
+      <div id="hello" class="hello">Sharp Tongue</div>
+    </div>
+    <div class="balance"><span class="ton-gem">◆</span> <b id="tonBalance">10.00</b> TON</div>
+  </header>
+
+  <main>
+    <section class="page active" id="shop">
+      <div class="upgrade-info">
+        <div>
+          <small>МЕХАНИКА UPGRADE</small>
+          <h2><span>1×</span> бесплатный roll</h2>
+          <p>Модель + фон + узор + номер.</p>
+        </div>
+        <div class="magic">✦</div>
+      </div>
+
+      <div class="section-title"><div><small>ЛИМИТИРОВАННАЯ СЕРИЯ</small><h2>Сегодня на витрине</h2></div><b>1 серия</b></div>
+
+      <div class="shop-card">
+        <div class="top-chips">
+          <span class="chip">Обычный</span>
+          <span class="chip gold">#001</span>
+        </div>
+        <div id="shopVisual" class="collectible-shell base-shell"></div>
+        <div class="shop-copy">
+          <div class="title-row"><h1>Sharp Tongue</h1><span id="shopSupplyMini">∞ шт.</span></div>
+          <div class="series">Gifts · Series 01</div>
+          <p>Острый характер. Большой потенциал.</p>
+        </div>
+        <div class="supply-row"><span>КУПЛЕНО ВСЕГО</span><b id="supplyText">0</b></div>
+        
+        <div class="buy-options">
+        <button id="buyStarsBtn" class="primary stars-btn">Купить · 15 ⭐</button>
+        <button id="buyTonBtn" class="primary ton-btn">Купить · 0.15 TON</button>
+      </div>
+      </div>
+
+      <button id="openTraits" class="wide-row">
+        <span><b>Посмотреть возможные варианты</b><small>Модели · фоны · узоры</small></span><span>›</span>
+      </button>
+    </section>
+
+    <section class="page" id="market">
+      <div class="section-title"><div><small>ВНУТРЕННИЙ РЫНОК</small><h2>Маркет</h2></div><b id="marketCount">0</b></div>
+      <div class="filters">
+        <input id="marketSearch" placeholder="Модель или #номер">
+        <select id="marketSort"><option value="new">Новые</option><option value="cheap">Дешевле</option><option value="expensive">Дороже</option></select>
+      </div>
+      <div id="marketGrid" class="grid"></div>
+      <div id="marketEmpty" class="empty hidden">Пока нет активных лотов.</div>
+    </section>
+
+    <section class="page" id="inventory">
+      <div class="section-title"><div><small>МОЯ КОЛЛЕКЦИЯ</small><h2>Коллекция</h2></div><b id="invCount">0</b></div>
+      <div class="segmented">
+        <button class="seg active" data-inv="all">Все</button>
+        <button class="seg" data-inv="upgraded">Улучшенные</button>
+        <button class="seg" data-inv="base">Обычные</button>
+      </div>
+      <div id="inventoryGrid" class="grid"></div>
+      <div id="inventoryEmpty" class="empty hidden">Инвентарь пуст.</div>
+    </section>
+
+    <section class="page" id="profile">
+      <div class="profile">
+        <div id="avatar" class="avatar">S</div>
+        <h2 id="profileName">Player</h2>
+        <div id="username" class="muted">Telegram</div>
+        <div class="stats">
+          <div><b id="profileTon">10.00</b><span>TON</span></div>
+          <div><b id="profileOwned">0</b><span>Подарков</span></div>
+          <div><b id="profileUpgraded">0</b><span>Улучшено</span></div>
+        </div>
+      </div>
+      <div class="info">
+        <b>Коллекционный номер</b>
+        <p>Номер выдаётся именно по очереди улучшений: первый Upgrade получает #1, следующий #2 и т.д.</p>
+      </div>
+    </section>
+  </main>
+
+  <nav class="nav">
+    <button class="active" data-page="shop"><span>🛍</span><small>Магазин</small></button>
+    <button data-page="market"><span>🏪</span><small>Маркет</small></button>
+    <button data-page="inventory"><span>◈</span><small>Коллекция</small></button>
+    <button data-page="profile"><span>👤</span><small>Профиль</small></button>
+  </nav>
+
+  <div id="toast" class="toast"></div>
+
+  <div id="sellSheet" class="overlay hidden">
+    <div class="sheet">
+      <div class="grab"></div>
+      <h3 id="sellTitle">Продать подарок</h3>
+      <label>Цена в TON<input id="sellPrice" type="number" min="0.001" max="1000" step="0.001" value="0.250"></label>
+      <button id="confirmSell" class="primary">Выставить</button>
+      <button id="cancelSell" class="secondary">Отмена</button>
+    </div>
+  </div>
+
+  <div id="traitsSheet" class="overlay hidden">
+    <div class="sheet traits-sheet">
+      <div class="grab"></div>
+      <div class="sheet-head"><h3>Варианты коллекции</h3><button id="closeTraits">✕</button></div>
+      <div class="tabs">
+        <button class="trait-tab active" data-trait="models">Модели</button>
+        <button class="trait-tab" data-trait="backdrops">Фоны</button>
+        <button class="trait-tab" data-trait="patterns">Узоры</button>
+      </div>
+      <div id="traitList" class="trait-list"></div>
+    </div>
+  </div>
+
+  <div id="upgradeOverlay" class="upgrade hidden">
+    <div class="upgrade-stars"></div>
+    <div class="reveal">
+      <div class="reveal-kicker">UPGRADE COMPLETE</div>
+      <div id="revealVisual" class="reveal-visual"></div>
+      <h2 id="revealNumber">#1</h2>
+      <div class="reveal-attrs">
+        <div><span>Модель</span><b id="revealModel">—</b></div>
+        <div><span>Фон</span><b id="revealBackdrop">—</b></div>
+        <div><span>Узор</span><b id="revealPattern">—</b></div>
+      </div>
+      <button id="closeReveal" class="primary">В коллекцию</button>
+    </div>
+  </div>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>
