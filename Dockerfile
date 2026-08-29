@@ -13,6 +13,9 @@ COPY . .
 ENV HOST=0.0.0.0
 ENV PORT=8000
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+EXPOSE 8000
 
 # Запуск приложения
-CMD ["python", "main.py"]
+CMD ["python", "-u", "main.py"]
