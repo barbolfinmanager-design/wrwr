@@ -12,8 +12,16 @@ import db
 dp = Dispatcher()
 
 def app_button():
+    """Кнопка для открытия веб-приложения"""
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🐸 Открыть Sharp Tongue", web_app=WebAppInfo(url=config.webapp_url))]
+        [InlineKeyboardButton(text="🚀 Открыть приложение", web_app=WebAppInfo(url=config.webapp_url))]
+    ])
+
+def main_menu():
+    """Главное меню с кнопками"""
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🚀 Открыть приложение", web_app=WebAppInfo(url=config.webapp_url))],
+        [InlineKeyboardButton(text="📞 Поддержка", callback_data="support")]
     ])
 
 @dp.message(CommandStart())
@@ -30,9 +38,18 @@ async def start(message: Message):
         "и торгуй ими на внутреннем маркете."
     )
     if config.webapp_url:
+        await message.answer(text, reply_markup=main_menu(), parse_mode=ParseMode.HTML)
+    else:
+        await message.answer(text + "\n\n⚠️ <b>WEBAPP_URL</b> ещё не настроен.", parse_mode=ParseMode.HTML)
+
+@dp.message(Command("app"))
+async def open_app(message: Message):
+    """Команда для открытия приложения"""
+    if config.webapp_url:
+        text = "🚀 <b>Sharp Tongue Mini App</b>\n\nНажми кнопку ниже, чтобы открыть приложение."
         await message.answer(text, reply_markup=app_button(), parse_mode=ParseMode.HTML)
     else:
-        await message.answer(text + "\n\nWEBAPP_URL ещё не настроен.", parse_mode=ParseMode.HTML)
+        await message.answer("⚠️ Приложение ещё не доступно. Попробуйте позже.", parse_mode=ParseMode.HTML)
 
 @dp.message(Command("paysupport"))
 async def paysupport(message: Message):
